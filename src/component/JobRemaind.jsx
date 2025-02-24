@@ -1,74 +1,50 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useGlobalContext } from '../Context';
 
 function JobRemaind() {
-  const { DataJobs,setDataJobs } = useGlobalContext();
-  const [isEditing,setIsEditing] = useState(false);
-  const [company,setCompany] = useState("");
-  const [roles,setRoles] = useState("");
-  const [dates,setDates] = useState("");
-  const [statuss,setStatuss] = useState("");
-  const [reminders,setReminders] = useState("");
-
+  const { DataJobs, setDataJobs } = useGlobalContext();
+  const [isEditing, setIsEditing] = useState(false);
+  const [company, setCompany] = useState("");
+  const [roles, setRoles] = useState("");
+  const [dates, setDates] = useState("");
+  const [statuss, setStatuss] = useState("");
+  const [reminders, setReminders] = useState("");
 
   const statusColor = Status => {
     switch (Status) {
-      case '✅ Applied':
-        return 'table-warning'
-      case '🏆 Offer':
-        return 'table-success'
-      case '🎤 Interview':
-        return 'table-info'
-      case '❌ Reject':
-        return 'table-danger'
-
-      default:
-        break;
+      case '✅ Applied': return 'table-warning';
+      case '🏆 Offer': return 'table-success';
+      case '🎤 Interview': return 'table-info';
+      case '❌ Reject': return 'table-danger';
+      default: return '';
     }
-  }
+  };
 
-  const deletignJob =  (nb)=>{
-    setDataJobs(prev =>{
-      return prev.filter(job => job.id !== nb);
-    })
+  const deleteJob = (id) => {
+    setDataJobs(prev => prev.filter(job => job.id !== id));
+  };
 
-  } 
+  const toggleEditing = () => setIsEditing(prev => !prev);
 
-  const editing = ()=>{
-    setIsEditing(prev => !prev)
-
-  
-  }
-
-  const ChangingData = (nb)=>{
-    setIsEditing(prev => !prev)
-
-    const CurrentJob = DataJobs.filter(job => job.id == nb);
-    
-    setDataJobs(prev =>{
-      return prev.map(jobs =>{
-        if(jobs.id == nb){
-          return {
-            ...jobs,
-            companyName:!company ? CurrentJob[0].companyName : company ,
-            Status: !statuss ? CurrentJob[0].Status : statuss,
-            Role : !roles ? CurrentJob[0].Role : roles,
-            date : !dates ? CurrentJob[0].date : dates,
-            reminder : !reminders ? CurrentJob[0].reminder : reminders
-          }
-        }else{
-          return jobs;
-        }
-      })
-    })
-  }
-
+  const saveChanges = (id) => {
+    setIsEditing(false);
+    setDataJobs(prev => prev.map(job => 
+      job.id === id ? {
+        ...job,
+        companyName: company || job.companyName,
+        Role: roles || job.Role,
+        date: dates || job.date,
+        Status: statuss || job.Status,
+        reminder: reminders || job.reminder
+      } : job
+    ));
+  };
 
   return (
-    <div>
-      <h4 className='text-center'>Edite</h4>
+    <div className='job-remaind-container'>
+      <h4 className='text-center'>Edit Jobs</h4>
       <hr />
-      <table class="table   ">
+      <table className='table table-hover'>
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -77,84 +53,86 @@ function JobRemaind() {
             <th scope="col">Date</th>
             <th scope="col">Status</th>
             <th scope="col">Reminder</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {
-            DataJobs.map((jobs, key) => {
-              const { companyName, Status, Role, date, reminder,id} = jobs;
+          {DataJobs.map((job, index) => {
+            const { id, companyName, Role, date, Status, reminder } = job;
+            const rowColor = statusColor(Status);
 
-              const Color = statusColor(Status);
-
-              return <tr key={key} className={Color} >
-                
-                <td>{key + 1}</td>
+            return (
+              <tr key={id} className={rowColor}>
+                <td>{index + 1}</td>
                 <td>
-                  {!isEditing && companyName}
-                  {
-                    isEditing &&
-                    <input type="text" onChange={(e)=> setCompany(e.target.value)} value={company} name='companyName' placeholder='Comapany Name...' />
-                  }
-                </td>
-                <td>
-                  {!isEditing && Role}
-                  {
-                    isEditing &&
-                    <input type="text" onChange={(e)=> setRoles(e.target.value)} value={roles} name='role' placeholder='Role...' />
-                  }
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      placeholder="Company Name"
+                    />
+                  ) : companyName}
                 </td>
                 <td>
-                  {!isEditing && date}
-                  {
-                    isEditing &&
-                    <input name="date" onChange={(e)=> setDates(e.target.value)} value={dates} type="Date" />
-                  }
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={roles}
+                      onChange={(e) => setRoles(e.target.value)}
+                      placeholder="Role"
+                    />
+                  ) : Role}
                 </td>
                 <td>
-                  {!isEditing && Status}
-                  {
-                    isEditing &&
-                  <select class="form-select" onChange={(e)=> setStatuss(e.target.value)} value={statuss} name='Status' aria-label="Default select example">
-                    <option selected>Open this select menu</option>
-                    <option value="✅ Applied">✅ Applied</option>
-                    <option value="🏆 Offer">🏆 Offer</option>
-                    <option value="🎤 Interview">🎤 Interview</option>
-                    <option value="❌ Reject">❌ Reject</option>
-                  </select>
-                    
-                    }
+                  {isEditing ? (
+                    <input
+                      type="date"
+                      value={dates}
+                      onChange={(e) => setDates(e.target.value)}
+                    />
+                  ) : date}
                 </td>
                 <td>
-                  {!isEditing && reminder}
-                  {
-                    isEditing &&
-                  <select class="form-select" onChange={(e)=> setReminders(e.target.value)} value={reminders} name='reminder' aria-label="Default select example">
-                    <option>Reminder</option>
-                    <option value="🔔 (Upcoming)">🔔 (Upcoming)</option>
-                    <option value="✅ (Done)">✅ (Done)</option>
-                    <option value="❌ (No Reminder)">❌ (No Reminder)</option>
-                  </select>
-                    }
+                  {isEditing ? (
+                    <select
+                      value={statuss}
+                      onChange={(e) => setStatuss(e.target.value)}
+                    >
+                      <option value="✅ Applied">✅ Applied</option>
+                      <option value="🏆 Offer">🏆 Offer</option>
+                      <option value="🎤 Interview">🎤 Interview</option>
+                      <option value="❌ Reject">❌ Reject</option>
+                    </select>
+                  ) : Status}
                 </td>
-                <td className='d-flex justify-content-between'>
-                  {
-                    isEditing ? 
-                    <button className='btn btn-secondary' onClick={()=>ChangingData(id)}>Change</button>
-                    :
-                    <button className='btn btn-secondary' onClick={()=> editing()}>Edite</button>
-
-                  }
-                  
-                  <button className='btn btn-danger' onClick={()=>deletignJob(id)}>Delete</button>
+                <td>
+                  {isEditing ? (
+                    <select
+                      value={reminders}
+                      onChange={(e) => setReminders(e.target.value)}
+                    >
+                      <option value="🔔 (Upcoming)">🔔 (Upcoming)</option>
+                      <option value="✅ (Done)">✅ (Done)</option>
+                      <option value="❌ (No Reminder)">❌ (No Reminder)</option>
+                    </select>
+                  ) : reminder}
                 </td>
-
+                <td>
+                  {isEditing ? (
+                    <button className='btn btn-success' onClick={() => saveChanges(id)}>Save</button>
+                  ) : (
+                    <button className='btn btn-warning' onClick={toggleEditing}>Edit</button>
+                  )}
+                  <button className='btn btn-danger' onClick={() => deleteJob(id)}>Delete</button>
+                </td>
               </tr>
-            })
-          }
+            );
+          })}
         </tbody>
       </table>
     </div>
-  )
+  );
 }
 
 export default JobRemaind;

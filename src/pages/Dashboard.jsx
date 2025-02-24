@@ -1,61 +1,54 @@
-import React from 'react'
+import React from 'react';
 import { NavLink, Outlet } from 'react-router';
 
 function Dashboard() {
   return (
-    <div className='container-fluid'>
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container">
-          <a class="navbar-brand" href="#">Logo</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+    <div className='dashboard-container'>
+      {/* Navbar */}
+      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div className="container">
+          <a className="navbar-brand" href="#">Logo</a>
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li className="nav-item">
+                <a className="nav-link active" aria-current="page" href="#">Home</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
+              <li className="nav-item">
+                <a className="nav-link" href="#">About</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Contact</a>
+              <li className="nav-item">
+                <a className="nav-link" href="#">Contact</a>
               </li>
             </ul>
-
-            <button class="btn btn-outline-success" type="submit">Sign In</button>
-           
+            <button className="btn btn-outline-light" type="submit">Sign In</button>
           </div>
         </div>
       </nav>
-      
-      <div className='container d-flex mt-4 p-5'>
-        <div className='p-2  border border-info' style={{height:"auto"}}>
+
+      {/* Sidebar and Content */}
+      <div className='dashboard-content'>
+        <div className='sidebar'>
           <ul>
             <li>
-              <NavLink to=''>
-                Add Job
-              </NavLink>
+              <NavLink to='' className="sidebar-link">Add Job</NavLink>
             </li>
             <li>
-              <NavLink to='viewalljobs'>
-              View ALL Jobs
-              </NavLink>
-              </li>
-
+              <NavLink to='viewalljobs' className="sidebar-link">View All Jobs</NavLink>
+            </li>
             <li>
-              <NavLink to='edite'>
-               Edite
-              </NavLink>
+              <NavLink to='edite' className="sidebar-link">Edit</NavLink>
             </li>
           </ul>
         </div>
-        <div className=' p-2 flex-grow-1 border border-primary' style={{height:"auto"}}>
-          <Outlet/>
+        <div className='main-content'>
+          <Outlet />
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Dashboard;

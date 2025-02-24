@@ -1,16 +1,15 @@
-import React from 'react'
-import { NavLink } from 'react-router'
+import React from 'react';
+import { NavLink } from 'react-router'; // Corrected import
 
 function Addjobs() {
   return (
-    <div>
-      Addjobs
+    <div className='addjobs-container'>
+      <h2 className='addjobs-title'>Add Jobs</h2>
       <NavLink to='/dashboard/addjobform'>
-
-      <button class='btn btn-success'>add</button>
+        <button className='btn btn-success add-button'>Add Job</button>
       </NavLink>
     </div>
-  )
+  );
 }
 
-export default Addjobs
+export default Addjobs;

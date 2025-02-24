@@ -1,29 +1,24 @@
-import React from 'react'
-import { useGlobalContext } from '../Context'
+import React from 'react';
+import { useGlobalContext } from '../Context';
+
 
 function ViewAllJobs() {
   const { DataJobs } = useGlobalContext();
 
   const statusColor = Status => {
     switch (Status) {
-      case '✅ Applied':
-        return 'table-warning'
-      case '🏆 Offer':
-        return 'table-success'
-      case '🎤 Interview':
-        return 'table-info'
-      case '❌ Reject':
-        return 'table-danger'
-
-      default:
-        break;
+      case '✅ Applied': return 'table-warning';
+      case '🏆 Offer': return 'table-success';
+      case '🎤 Interview': return 'table-info';
+      case '❌ Reject': return 'table-danger';
+      default: return '';
     }
-  }
+  };
 
   return (
-    <div>
+    <div className='view-all-jobs-container'>
       <h4 className='text-center'>All Jobs</h4>
-      <table class="table   ">
+      <table className='table table-hover'>
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -35,26 +30,25 @@ function ViewAllJobs() {
           </tr>
         </thead>
         <tbody>
-          {
-            DataJobs.map((jobs, key) => {
-              const { companyName, Status, Role, date,reminder } = jobs;
+          {DataJobs.map((job, index) => {
+            const { companyName, Role, date, Status, reminder } = job;
+            const rowColor = statusColor(Status);
 
-              const Color = statusColor(Status);
-
-              return <tr key={key} className={Color} >
-                <td>{key + 1}</td>
+            return (
+              <tr key={index} className={rowColor}>
+                <td>{index + 1}</td>
                 <td>{companyName}</td>
                 <td>{Role}</td>
                 <td>{date}</td>
                 <td>{Status}</td>
                 <td>{reminder}</td>
               </tr>
-            })
-          }
+            );
+          })}
         </tbody>
       </table>
     </div>
-  )
+  );
 }
 
-export default ViewAllJobs
+export default ViewAllJobs;
