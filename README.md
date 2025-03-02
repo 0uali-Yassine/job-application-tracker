@@ -26,7 +26,7 @@ A modern and responsive React application to track job applications. This projec
 
    ```bash
    git clone https://github.com/0uali-Yassine/job-application-tracker.git
-   cd ai-powered-resume-analyzer
+   cd job-application-tracker
    
 2. **Install dependencies:**
 
